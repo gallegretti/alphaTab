@@ -276,9 +276,9 @@ export class BoundsLookup {
      * Tries to find the note at the given position using the given beat for fast access.
      * Use {@link findBeat} to find a beat for a given position first.
      * @param beat The beat containing the note.
-     * @param x The X-position of the note.
-     * @param y The Y-position of the note.
-     * @returns The note at the given position within the beat.
+     * @param x The X-position of the note to find.
+     * @param y The Y-position of the note to find.
+     * @returns The note at the given position within the beat or null if no note could be found.
      */
     public getNoteAtPos(beat: Beat, x: number, y: number): Note | null {
         let beatBounds: BeatBounds | null = this.findBeat(beat);
