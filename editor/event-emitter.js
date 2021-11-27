@@ -1,13 +1,7 @@
+const callbacks = [];
+
 function emitEvent(event) {
-    console.log(event);
-    if (event.type === 'string-mouse-down') {
-        const note = new alphaTab.model.Note();
-        note.fret = 8;
-        note.string = event.data.stringNumber;
-        event.data.beat.addNote(note);
-        event.data.beat.finish();
-        at.render();
-    }
+    callbacks.forEach((callback) => callback(event));
 }
 
 function getStringNumber(y, barBounds) {
@@ -38,11 +32,14 @@ $(window).on('alphaTab.beatMouseDown', (event, beat) => {
     const y = window.event.pageY;
     const x = window.event.offsetX;
     const note = at.renderer.boundsLookup.getNoteAtPos(beat, x, y);
-    if (note) {
+    const bounds = at.renderer.boundsLookup.getNoteBounds(note);
+    if (bounds) {
       emitEvent({
             type: 'note-mouse-down',
             data: {
-                note
+                note: note,
+                noteBounds: bounds.noteHeadBounds,
+                beatBounds: bounds.beatBounds.visualBounds,
             }
       });
       return;
@@ -59,3 +56,33 @@ $(window).on('alphaTab.beatMouseDown', (event, beat) => {
         });
     }
 });
+
+$(window).on('alphaTab.renderFinished', (event) => {
+    emitEvent({
+        type: 'render-finished',
+        data: {}
+    })
+})
+
+document.addEventListener('keydown', (event) => {
+    console.log(event);
+    if (event.type === 'keydown' && event.key >= '0' && event.key <= '9') {
+        emitEvent({
+            type: 'numberDown',
+            data: {
+                key: Number.parseInt(event.key)
+            }
+        });
+    }
+    if (event.type === 'keydown' && event.key === 'Delete') {
+        emitEvent({
+            type: 'deleteDown',
+            data: {}
+        });
+    }
+});
+
+
+export default function createEventEmitter(callback) {
+    callbacks.push(callback);
+}

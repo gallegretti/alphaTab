@@ -272,6 +272,29 @@ export class BoundsLookup {
         return null;
     }
 
+    public getNoteBounds(note: Note): NoteBounds | null {
+        if (!note) {
+            return null;
+        }
+        return this.findBeat(note.beat)?.getNoteBounds(note.id) ?? null;
+    }
+
+    /**
+     * Tries to find the note at the given position using the given beat for fast access.
+     * Use {@link findBeat} to find a beat for a given position first.
+     * @param beat The beat containing the note.
+     * @param x The X-position of the note to find.
+     * @param y The Y-position of the note to find.
+     * @returns The note at the given position within the beat or null if no note could be found.
+     */
+    public getNoteBoundsAtPos(beat: Beat, x: number, y: number): NoteBounds | null {
+        let beatBounds: BeatBounds | null = this.findBeat(beat);
+        if (!beatBounds) {
+            return null;
+        }
+        return beatBounds.findNoteBoundsAtPos(x, y);
+    }
+
     /**
      * Tries to find the note at the given position using the given beat for fast access.
      * Use {@link findBeat} to find a beat for a given position first.

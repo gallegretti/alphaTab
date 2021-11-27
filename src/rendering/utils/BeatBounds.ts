@@ -45,13 +45,17 @@ export class BeatBounds {
         this.notes.push(bounds);
     }
 
+    public getNoteBounds(noteId: number): NoteBounds | null {
+        return this.notes?.find(note => note.note.id === noteId) ?? null;
+    }
+
     /**
      * Tries to find a note at the given position.
      * @param x The X-position of the note to find.
      * @param y The Y-position of the note to find.
      * @returns The note at the given position or null if no note was found, or the note lookup was not enabled before rendering.
      */
-    public findNoteAtPos(x: number, y: number): Note | null {
+    public findNoteBoundsAtPos(x: number, y: number): NoteBounds | null {
         const notes = this.notes;
         if (!notes) {
             return null;
@@ -63,9 +67,19 @@ export class BeatBounds {
             let bottom: number = note.noteHeadBounds.y + note.noteHeadBounds.h;
             let right: number = note.noteHeadBounds.x + note.noteHeadBounds.w;
             if (note.noteHeadBounds.x <= x && note.noteHeadBounds.y <= y && x <= right && y <= bottom) {
-                return note.note;
+                return note;
             }
         }
         return null;
+    }
+
+    /**
+     * Tries to find a note at the given position.
+     * @param x The X-position of the note to find.
+     * @param y The Y-position of the note to find.
+     * @returns The note at the given position or null if no note was found, or the note lookup was not enabled before rendering.
+     */
+    public findNoteAtPos(x: number, y: number): Note | null {
+        return this.findNoteBoundsAtPos(x, y)?.note ?? null;
     }
 }
