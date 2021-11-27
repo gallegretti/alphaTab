@@ -16,14 +16,31 @@ function onEvent(event) {
         selectedNoteOverlay.toggleNoteSelection(event.data);
     }
     if (event.type === 'numberDown' && selectedNoteOverlay.hasSelectedNote()) {
-        selectedNoteOverlay.setSelectedNoteFret(event.data.key);
+        selectedNoteOverlay.getSelectedNote().note.fret = event.data.key;
     }
     if (event.type === 'deleteDown') {
-        // TODO:
+        const currentSelectedNote = selectedNoteOverlay.getSelectedNote();
+        if (currentSelectedNote) {
+            removeNote(currentSelectedNote.note);
+            selectedNoteOverlay.setSelectedNote(null);
+            selectedNoteOverlay.redrawOverlay();
+            at.render();
+        }
     }
     if (event.type === 'render-finished') {
         selectedNoteOverlay.redrawOverlay();
     }
+    if (event.type === 'arrowRightDown' && selectedNoteOverlay.hasSelectedNote()) {
+        selectedNoteOverlay.moveSelectedNoteRight();
+    }
+    if (event.type === 'arrowLeftDown' && selectedNoteOverlay.hasSelectedNote()) {
+        selectedNoteOverlay.moveSelectedNoteLeft();
+    }
+}
+
+
+function removeNote(note) {
+    note.beat.removeNote(note);
 }
 
 function addNoteOnClick(beat, stringNumber) {

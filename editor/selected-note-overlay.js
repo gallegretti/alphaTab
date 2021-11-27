@@ -1,16 +1,12 @@
 class SelectedNoteOverlay {
     currentSelectedNote = null;
 
-    setSelectedNoteFret(fret) {
-        if (this.currentSelectedNote === null) {
-            return;
-        }
-        this.currentSelectedNote.note.fret = fret;
-        at.render();
-    }
-
     hasSelectedNote() {
         return this.currentSelectedNote !== null;
+    }
+
+    getSelectedNote() {
+        return this.currentSelectedNote;
     }
 
     drawSelectedNote(bounds) {
@@ -41,11 +37,56 @@ class SelectedNoteOverlay {
         alphaTabElement.appendChild(newSelection);
     }
 
-    redrawOverlay() {
-        if (this.currentSelectedNote) {
-            // TODO: note bounds is stale, needs to be fetched again
-            this.drawSelectedNote(this.currentSelectedNote.noteBounds);
+    selectNextNote(currentNote, availableNotes) {
+        const newNote = availableNotes.find((newNote) => newNote.string === currentNote.string);
+        if (newNote) {
+            return newNote;
         }
+        return availableNotes.find((newNote) => newNote.string < currentNote.string) ?? availableNotes.find((newNote) => newNote.string > currentNote.string);
+    }
+
+    selectAvailableNotes(currentBeat, getBeat) {
+        let beat = currentBeat;
+        do {
+            // Skip empty beats until the next beat with notes is found
+            beat = getBeat(beat, getBeat);
+        } while(beat && beat.notes.length === 0)
+        return beat?.notes;
+    }
+
+    moveSelectedNoteHorizontal(getBeat) {
+        const note = this.currentSelectedNote.note;
+        if (!note) {
+            return;
+        }
+        const notes = this.selectAvailableNotes(note.beat, getBeat);
+        if (!notes) {
+            return;
+        }
+        const newNote = this.selectNextNote(note, notes);
+        if (!newNote) {
+            return;
+        }
+        const newNoteData = at.renderer.boundsLookup.getNoteBounds(newNote);
+        this.setSelectedNote({
+            note: newNoteData.note,
+            noteBounds: newNoteData.noteHeadBounds,
+            beatBounds: newNoteData.beatBounds.visualBounds,
+        });
+        this.redrawOverlay();
+    }
+
+    moveSelectedNoteLeft() {
+        return this.moveSelectedNoteHorizontal((beat) => beat.previousBeat);
+    }
+
+    moveSelectedNoteRight() {
+        return this.moveSelectedNoteHorizontal((beat) => beat.nextBeat);
+    }
+
+    redrawOverlay() {
+        // TODO: note bounds is stale, needs to be fetched again
+        this.drawSelectedNote(this.currentSelectedNote?.noteBounds);
     }
 
     setSelectedNote(data) {

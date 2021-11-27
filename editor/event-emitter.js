@@ -80,8 +80,19 @@ document.addEventListener('keydown', (event) => {
             data: {}
         });
     }
+    if (event.type === 'keydown' && event.key === 'ArrowLeft') {
+        emitEvent({
+            type: 'arrowLeftDown',
+            data: {}
+        })
+    }
+    if (event.type === 'keydown' && event.key === 'ArrowRight') {
+        emitEvent({
+            type: 'arrowRightDown',
+            data: {}
+        })
+    }
 });
-
 
 export default function createEventEmitter(callback) {
     callbacks.push(callback);
