@@ -134,7 +134,7 @@ android {
 
 dependencies {
     // To use the androidx.test.core APIs
-    androidTestImplementation("androidx.test:core:1.5.0")
+    androidTestImplementation("androidx.test:core:1.6.1")
     // Kotlin extensions for androidx.test.core
     androidTestImplementation("androidx.test:core-ktx:1.6.1")
 }
