@@ -71,7 +71,7 @@
         "karma-spec-reporter": "0.0.36",
         "lodash": "^4.17.21",
         "multer": "^1.4.4",
-        "rimraf": "^5.0.0",
+        "rimraf": "^6.0.1",
         "rollup": "^2.75.1",
         "rollup-plugin-copy": "^3.4.0",
         "rollup-plugin-dts": "^6.1.0",
