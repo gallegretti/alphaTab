@@ -59,7 +59,7 @@
         "@types/css-font-loading-module": "0.0.13",
         "@types/jasmine": "^5.1.0",
         "@types/resize-observer-browser": "^0.1.7",
-        "concurrently": "^8.0.1",
+        "concurrently": "^9.0.0",
         "cors": "^2.8.5",
         "fs-extra": "^11.1.0",
         "karma": "^6.3.20",
