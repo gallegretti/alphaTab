@@ -56,7 +56,7 @@
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^26.0.1",
-        "@types/css-font-loading-module": "0.0.13",
+        "@types/css-font-loading-module": "0.0.14",
         "@types/jasmine": "^5.1.0",
         "@types/resize-observer-browser": "^0.1.7",
         "concurrently": "^9.0.0",
