@@ -25,7 +25,7 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-      <PackageReference Include="SkiaSharp" Version="3.119.2" />
+      <PackageReference Include="SkiaSharp" Version="3.119.4" />
       <PackageReference Include="SkiaSharp.HarfBuzz" Version="3.119.2" />
       <PackageReference Include="System.Drawing.Common" Version="10.0.8" />
     </ItemGroup>
